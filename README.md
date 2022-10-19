@@ -5,9 +5,13 @@ API](http://docs.docker.com/registry/spec/api/), for Go applications.
 
 ## Imports
 
+```shell
+go get github.com/kevin2027/docker-registry-client
+```
+
 ```go
 import (
-    "github.com/heroku/docker-registry-client/registry"
+    "github.com/kevin2027/docker-registry-client/registry"
     "github.com/docker/distribution/digest"
     "github.com/docker/distribution/manifest"
     "github.com/docker/libtrust"
@@ -42,7 +46,7 @@ The repositories will be returned as a slice of `string`s.
 Each Docker repository has a set of tags -- named images that can be downloaded.
 
 ```go
-tags, err := hub.Tags("heroku/cedar")
+tags, err := hub.Tags("example/repo")
 ```
 
 The tags will be returned as a slice of `string`s.
@@ -53,13 +57,13 @@ Each tag has a corresponding manifest, which lists the layers and image
 configuration for that tag.
 
 ```go
-manifest, err := hub.Manifest("heroku/cedar", "14")
+manifest, err := hub.Manifest("example/repo", "14")
 ```
 
 Schema V2
 
 ```go
-manifest, err := hub.ManifestV2("heroku/cedar", "14")
+manifest, err := hub.ManifestV2("example/repo", "14")
 ```
 
 The returned manifest will be a `manifest.SignedManifest` pointer. For details,
@@ -70,7 +74,7 @@ see the `github.com/docker/distribution/manifest` library.
 A manifest is identified by a digest.
 
 ```go
-digest, err := hub.ManifestDigest("heroku/cedar", "14")
+digest, err := hub.ManifestDigest("example/repo", "14")
 ```
 
 The returned digest will be a `digest.Digest`. See `github.com/docker/distribution/digest`.
@@ -80,8 +84,8 @@ The returned digest will be a `digest.Digest`. See `github.com/docker/distributi
 To delete a manifest
 
 ```go
-digest, err := hub.ManifestDigest("heroku/cedar", "14")
-err = hub.DeleteManifest("heroku/cedar", digest)
+digest, err := hub.ManifestDigest("example/repo", "14")
+err = hub.DeleteManifest("example/repo", digest)
 ```
 
 Please notice that, as specified by the Registry v2 API, this call doesn't actually remove the fs layers used by the image.
@@ -97,7 +101,7 @@ digest := digest.NewDigestFromHex(
     "sha256",
     "a3ed95caeb02ffe68cdd9fd84406680ae93d633cb16422d00e8a7c22955b46d4",
 )
-reader, err := hub.DownloadBlob("heroku/cedar", digest)
+reader, err := hub.DownloadBlob("example/repo", digest)
 if reader != nil {
     defer reader.Close()
 }
